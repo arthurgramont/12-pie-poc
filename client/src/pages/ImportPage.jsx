@@ -44,6 +44,7 @@ function ImportPage({ destination, onDone, onBack }) {
             title: data.title || 'Vidéo importée',
             author: data.author_name || 'Utilisateur',
             thumbnail: data.thumbnail_url || null,
+            hashtags: data.hashtags || [],
           },
         ]);
       } else {
@@ -57,6 +58,7 @@ function ImportPage({ destination, onDone, onBack }) {
             title: platform === 'tiktok' ? 'Vidéo TikTok' : 'Vidéo Instagram',
             author: 'Utilisateur',
             thumbnail: null,
+            hashtags: [],
           },
         ]);
       }
@@ -71,6 +73,7 @@ function ImportPage({ destination, onDone, onBack }) {
           title: platform === 'tiktok' ? 'Vidéo TikTok' : 'Vidéo Instagram',
           author: 'Utilisateur',
           thumbnail: null,
+          hashtags: [],
         },
       ]);
     }
@@ -192,6 +195,44 @@ function ImportPage({ destination, onDone, onBack }) {
                   >
                     {video.platform === 'tiktok' ? 'TikTok' : 'Instagram'}
                   </span>
+                  {video.hashtags && video.hashtags.length > 0 && (
+                    <div className="hashtags-container" style={{
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      gap: 4,
+                      marginTop: 6,
+                    }}>
+                      {video.hashtags.slice(0, 8).map((tag, i) => (
+                        <span
+                          key={i}
+                          className="hashtag-badge"
+                          style={{
+                            fontSize: 10,
+                            padding: '2px 8px',
+                            borderRadius: 12,
+                            background: 'rgba(139, 92, 246, 0.15)',
+                            color: '#A78BFA',
+                            fontWeight: 500,
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      {video.hashtags.length > 8 && (
+                        <span style={{
+                          fontSize: 10,
+                          padding: '2px 8px',
+                          borderRadius: 12,
+                          background: 'rgba(139, 92, 246, 0.1)',
+                          color: '#7C3AED',
+                          fontWeight: 500,
+                        }}>
+                          +{video.hashtags.length - 8}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
                 <button
                   className="video-remove-btn"
