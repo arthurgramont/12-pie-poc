@@ -13,15 +13,21 @@ const CATEGORY_LABELS = {
 function SwipePage({ destination, onDone, onBack }) {
   const destPlaces = places[destination.id];
 
-  // Flatten all places into a single array in order: hotels → restaurants → activities
+  // Mélange totalement aléatoire de toutes les cartes
   const allCards = useMemo(() => {
-    const arr = [];
-    CATEGORY_ORDER.forEach((cat) => {
-      const key = cat === 'hotel' ? 'hotels' : cat === 'restaurant' ? 'restaurants' : 'activities';
-      if (destPlaces[key]) {
-        arr.push(...destPlaces[key]);
-      }
-    });
+    const hotels = destPlaces.hotels || [];
+    const restaurants = destPlaces.restaurants || [];
+    const activities = destPlaces.activities || [];
+    
+    // On regroupe tout dans un seul grand tableau
+    const arr = [...hotels, ...restaurants, ...activities];
+    
+    // Mélange de Fisher-Yates pour un ordre complètement aléatoire
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    
     return arr;
   }, [destPlaces]);
 
@@ -131,53 +137,55 @@ function SwipePage({ destination, onDone, onBack }) {
       <div className="swipe-container">
         <div className="swipe-cards-stack">
           {allCards.map((card, index) => (
-            <TinderCard
-              ref={childRefs[index]}
-              key={card.id}
-              onSwipe={(dir) => swiped(dir, card, index)}
-              onCardLeftScreen={() => outOfFrame(card.name, index)}
-              preventSwipe={['up', 'down']}
-              className="swipe-card-wrapper"
-            >
-              <div
-                className="swipe-card"
-                style={{
-                  display: index === currentIndex || index === currentIndex - 1 ? 'block' : 'none',
-                  transform: index === currentIndex - 1 ? 'scale(0.95) translateY(10px)' : 'none',
-                  opacity: index === currentIndex ? 1 : 0.6,
-                  zIndex: index,
-                }}
+            index <= currentIndex && index >= currentIndex - 1 && (
+              <TinderCard
+                ref={childRefs[index]}
+                key={card.id}
+                onSwipe={(dir) => swiped(dir, card, index)}
+                onCardLeftScreen={() => outOfFrame(card.name, index)}
+                preventSwipe={['up', 'down']}
+                className="swipe-card-wrapper"
               >
-                <img
-                  src={card.image}
-                  alt={card.name}
-                  className="swipe-card-image"
-                  loading="lazy"
-                />
-                <div className="swipe-card-body">
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                      <span className={`badge ${card.category === 'hotel' ? 'badge-blue' : card.category === 'restaurant' ? 'badge-gold' : 'badge-green'}`}>
-                        {card.category === 'hotel' ? '🏨' : card.category === 'restaurant' ? '🍽️' : '🎯'}{' '}
-                        {card.category === 'hotel' ? 'Hôtel' : card.category === 'restaurant' ? 'Restaurant' : 'Activité'}
+                <div
+                  className="swipe-card"
+                  style={{
+                    transform: index === currentIndex - 1 ? 'scale(0.95) translateY(10px)' : 'none',
+                    opacity: index === currentIndex ? 1 : 0.6,
+                    zIndex: index,
+                  }}
+                >
+                  <img
+                    src={card.image}
+                    alt={card.name}
+                    className="swipe-card-image"
+                    draggable="false"
+                    loading="lazy"
+                  />
+                  <div className="swipe-card-body">
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                        <span className={`badge ${card.category === 'hotel' ? 'badge-blue' : card.category === 'restaurant' ? 'badge-gold' : 'badge-green'}`}>
+                          {card.category === 'hotel' ? '🏨' : card.category === 'restaurant' ? '🍽️' : '🎯'}{' '}
+                          {card.category === 'hotel' ? 'Hôtel' : card.category === 'restaurant' ? 'Restaurant' : 'Activité'}
+                        </span>
+                      </div>
+                      <h3>{card.name}</h3>
+                      <p>{card.description}</p>
+                    </div>
+                    <div className="swipe-card-meta">
+                      <span className="swipe-card-price">
+                        {card.price === 0 ? 'Gratuit' : `${card.price}€`}
+                        {card.category === 'hotel' ? '/nuit' : card.category === 'restaurant' ? '/pers' : ''}
+                      </span>
+                      <span className="swipe-card-rating">
+                        <Star size={14} fill="#F59E0B" />
+                        {card.rating}
                       </span>
                     </div>
-                    <h3>{card.name}</h3>
-                    <p>{card.description}</p>
-                  </div>
-                  <div className="swipe-card-meta">
-                    <span className="swipe-card-price">
-                      {card.price === 0 ? 'Gratuit' : `${card.price}€`}
-                      {card.category === 'hotel' ? '/nuit' : card.category === 'restaurant' ? '/pers' : ''}
-                    </span>
-                    <span className="swipe-card-rating">
-                      <Star size={14} fill="#F59E0B" />
-                      {card.rating}
-                    </span>
                   </div>
                 </div>
-              </div>
-            </TinderCard>
+              </TinderCard>
+            )
           ))}
         </div>
 
