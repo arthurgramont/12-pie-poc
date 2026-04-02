@@ -9,11 +9,12 @@ function ItineraryPage({ itinerary, destination, formData, likedPlaces, onRestar
 
   if (!itinerary) return null;
 
-  // Budget calculations
-  const budgetWithVoyagr = itinerary.totalBudget;
-  const budgetWithoutVoyagr = Math.round(budgetWithVoyagr * 1.3); // 30% more expensive without our tool
+  // Budget calculations (rounded to nearest 10)
+  const roundTo10 = (n) => Math.round(n / 10) * 10;
+  const budgetWithVoyagr = roundTo10(itinerary.totalBudget);
+  const budgetWithoutVoyagr = roundTo10(itinerary.totalBudget * 1.3);
   const savings = budgetWithoutVoyagr - budgetWithVoyagr;
-  const unlockPrice = Math.round(savings * 0.1); // 10% of savings
+  const unlockPrice = roundTo10(savings * 0.1); // 10% of savings
 
   const getCategoryIcon = (type) => {
     switch (type) {
