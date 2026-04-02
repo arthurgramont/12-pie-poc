@@ -54,7 +54,7 @@ function ImportPage({ destination, onDone, onBack }) {
 
     try {
       // Try to fetch metadata from our backend
-      const response = await fetch('http://localhost:3001/api/video/import', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/video/import`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: url.trim() }),
