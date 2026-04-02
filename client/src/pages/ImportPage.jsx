@@ -1,11 +1,38 @@
 import { useState } from 'react';
-import { Link2, Plus, X, ChevronLeft, ArrowRight } from 'lucide-react';
+import { Link2, Plus, X, ChevronLeft, ArrowRight, Hash, Check } from 'lucide-react';
 
 function ImportPage({ destination, onDone, onBack }) {
   const [url, setUrl] = useState('');
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [editingHashtagsId, setEditingHashtagsId] = useState(null);
+  const [hashtagInput, setHashtagInput] = useState('');
+
+  // Extract hashtags from text (client-side)
+  const extractHashtagsFromText = (text) => {
+    if (!text) return [];
+    const matches = text.match(/#[\w\u00C0-\u024F\u1E00-\u1EFF]+/gu);
+    if (!matches) return [];
+    const seen = new Set();
+    return matches.filter((tag) => {
+      const lower = tag.toLowerCase();
+      if (seen.has(lower)) return false;
+      seen.add(lower);
+      return true;
+    });
+  };
+
+  const handleSaveHashtags = (videoId) => {
+    const tags = extractHashtagsFromText(hashtagInput);
+    if (tags.length > 0) {
+      setVideos((prev) =>
+        prev.map((v) => (v.id === videoId ? { ...v, hashtags: tags } : v))
+      );
+    }
+    setEditingHashtagsId(null);
+    setHashtagInput('');
+  };
 
   const detectPlatform = (link) => {
     if (link.includes('tiktok.com')) return 'tiktok';
@@ -231,6 +258,74 @@ function ImportPage({ destination, onDone, onBack }) {
                           +{video.hashtags.length - 8}
                         </span>
                       )}
+                    </div>
+                  )}
+                  {/* Show hashtag input for videos without hashtags */}
+                  {(!video.hashtags || video.hashtags.length === 0) && editingHashtagsId !== video.id && (
+                    <button
+                      onClick={() => {
+                        setEditingHashtagsId(video.id);
+                        setHashtagInput('');
+                      }}
+                      style={{
+                        marginTop: 6,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 4,
+                        fontSize: 11,
+                        color: '#A78BFA',
+                        background: 'rgba(139, 92, 246, 0.1)',
+                        border: '1px dashed rgba(139, 92, 246, 0.3)',
+                        borderRadius: 8,
+                        padding: '4px 10px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <Hash size={12} />
+                      Ajouter les hashtags
+                    </button>
+                  )}
+                  {editingHashtagsId === video.id && (
+                    <div style={{ marginTop: 6, display: 'flex', gap: 4, alignItems: 'center' }}>
+                      <input
+                        type="text"
+                        value={hashtagInput}
+                        onChange={(e) => setHashtagInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') handleSaveHashtags(video.id);
+                        }}
+                        placeholder="Coller la description ici..."
+                        autoFocus
+                        style={{
+                          flex: 1,
+                          fontSize: 11,
+                          padding: '4px 8px',
+                          borderRadius: 8,
+                          border: '1px solid rgba(139, 92, 246, 0.3)',
+                          background: 'rgba(139, 92, 246, 0.05)',
+                          color: '#E2E8F0',
+                          outline: 'none',
+                          minWidth: 0,
+                        }}
+                      />
+                      <button
+                        onClick={() => handleSaveHashtags(video.id)}
+                        style={{
+                          width: 28,
+                          height: 28,
+                          borderRadius: 8,
+                          background: 'rgba(139, 92, 246, 0.2)',
+                          border: 'none',
+                          color: '#A78BFA',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0,
+                        }}
+                      >
+                        <Check size={14} />
+                      </button>
                     </div>
                   )}
                 </div>
