@@ -219,13 +219,19 @@ const styles = StyleSheet.create({
   },
 });
 
+// Helper to strip emoji characters that Inter font cannot render
+const stripEmoji = (str) => {
+  if (!str) return str;
+  return str.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/gu, '').trim();
+};
+
 function ItineraryPDF({ itinerary, destination, formData }) {
-  const getCategoryEmoji = (type) => {
+  const getCategoryLabel = (type) => {
     switch (type) {
-      case 'hotel': return '🏨';
-      case 'restaurant': return '🍽';
-      case 'activity': return '🎯';
-      default: return '📍';
+      case 'hotel': return '[Hotel]';
+      case 'restaurant': return '[Restaurant]';
+      case 'activity': return '[Activite]';
+      default: return '[Lieu]';
     }
   };
 
@@ -244,9 +250,9 @@ function ItineraryPDF({ itinerary, destination, formData }) {
       <Page size="A4" style={styles.coverPage}>
         <Text style={styles.logo}>Voyagr</Text>
         <Text style={styles.coverTitle}>
-          {destination.emoji} {destination.name}
+          {stripEmoji(destination.name)}
         </Text>
-        <Text style={styles.coverSubtitle}>{destination.description}</Text>
+        <Text style={styles.coverSubtitle}>{stripEmoji(destination.description)}</Text>
 
         <View style={styles.coverMeta}>
           <View style={styles.coverMetaItem}>
@@ -292,12 +298,12 @@ function ItineraryPDF({ itinerary, destination, formData }) {
               style={[styles.item, { borderLeftColor: getItemBorderColor(item.type) }]}
             >
               <Text style={[styles.itemTime, { color: getItemBorderColor(item.type) }]}>
-                {item.time} — {item.note}
+                {item.time} - {stripEmoji(item.note)}
               </Text>
               <Text style={styles.itemName}>
-                {getCategoryEmoji(item.type)} {item.place.name}
+                {getCategoryLabel(item.type)} {stripEmoji(item.place.name)}
               </Text>
-              <Text style={styles.itemDesc}>{item.place.description}</Text>
+              <Text style={styles.itemDesc}>{stripEmoji(item.place.description)}</Text>
               <View style={styles.itemFooter}>
                 <Text style={styles.itemPrice}>
                   {item.place.price === 0 ? 'Gratuit' : `${item.place.price}€`}
@@ -307,13 +313,13 @@ function ItineraryPDF({ itinerary, destination, formData }) {
                     ? '/pers'
                     : ''}
                 </Text>
-                <Text style={styles.itemRating}>★ {item.place.rating}</Text>
+                <Text style={styles.itemRating}>{item.place.rating} / 5</Text>
               </View>
             </View>
           ))}
 
           <View style={styles.footer}>
-            <Text style={styles.footerText}>Voyagr — {destination.name}</Text>
+            <Text style={styles.footerText}>Voyagr - {stripEmoji(destination.name)}</Text>
             <Text style={styles.footerText}>
               Page {day.dayNumber + 1}
             </Text>
@@ -329,7 +335,7 @@ function ItineraryPDF({ itinerary, destination, formData }) {
           <View style={styles.budgetRow}>
             <Text style={styles.budgetLabel}>Destination</Text>
             <Text style={styles.budgetValue}>
-              {destination.emoji} {destination.name}
+              {stripEmoji(destination.name)}
             </Text>
           </View>
           <View style={styles.budgetRow}>
@@ -356,11 +362,11 @@ function ItineraryPDF({ itinerary, destination, formData }) {
         <Text style={{ fontSize: 10, color: colors.textSecondary, textAlign: 'center', lineHeight: 1.5 }}>
           Ce document a été généré automatiquement par Voyagr.{'\n'}
           Les prix sont indicatifs et peuvent varier.{'\n'}
-          Bon voyage ! ✈️
+          Bon voyage !
         </Text>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Voyagr — Planificateur de voyage intelligent</Text>
+          <Text style={styles.footerText}>Voyagr - Planificateur de voyage intelligent</Text>
           <Text style={styles.footerText}>{new Date().toLocaleDateString('fr-FR')}</Text>
         </View>
       </Page>

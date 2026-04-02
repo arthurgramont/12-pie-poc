@@ -43,6 +43,36 @@ function ResultsPage({ likedPlaces, destination, onContinue, onBack }) {
         </div>
       ) : (
         <>
+
+         {/* CTA to unlock itinerary */}
+          <div
+            className="glass-card"
+            style={{
+              textAlign: 'center',
+              marginTop: 8,
+              marginBottom: 16,
+              background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(124, 58, 237, 0.1))',
+              border: '1px solid rgba(245, 158, 11, 0.25)',
+            }}
+          >
+            <Lock size={28} style={{ color: 'var(--accent-gold)', marginBottom: 8 }} />
+            <h3 style={{ fontSize: 17, marginBottom: 4 }}>
+              Remplir le formulaire pour affiner votre itinéraire
+            </h3>
+            <p style={{ fontSize: 13, marginBottom: 16 }}>
+              Obtenez un planning jour par jour personnalisé avec les meilleures offres
+            </p>
+            <button
+              className="btn btn-gold btn-full"
+              onClick={onContinue}
+              id="unlock-itinerary-btn"
+            >
+              <Lock size={16} />
+              Affiner mon itinéraire
+            </button>
+          </div>
+
+          
           {sections.map((section) => (
             <div key={section.title} style={{ marginBottom: 20 }}>
               <h3 style={{ fontSize: 16, marginBottom: 12 }}>{section.title}</h3>
@@ -68,32 +98,7 @@ function ResultsPage({ likedPlaces, destination, onContinue, onBack }) {
             </div>
           ))}
 
-          {/* CTA to unlock itinerary */}
-          <div
-            className="glass-card"
-            style={{
-              textAlign: 'center',
-              marginTop: 8,
-              background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(124, 58, 237, 0.1))',
-              border: '1px solid rgba(245, 158, 11, 0.25)',
-            }}
-          >
-            <Lock size={28} style={{ color: 'var(--accent-gold)', marginBottom: 8 }} />
-            <h3 style={{ fontSize: 17, marginBottom: 4 }}>
-              Débloquez votre itinéraire
-            </h3>
-            <p style={{ fontSize: 13, marginBottom: 16 }}>
-              Obtenez un planning jour par jour personnalisé avec les meilleures offres
-            </p>
-            <button
-              className="btn btn-gold btn-full"
-              onClick={onContinue}
-              id="unlock-itinerary-btn"
-            >
-              <Lock size={16} />
-              Créer mon itinéraire — 9,99€
-            </button>
-          </div>
+         
         </>
       )}
     </div>
