@@ -281,7 +281,6 @@ function ItineraryPage({ itinerary, destination, formData, likedPlaces, onRestar
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'linear-gradient(to bottom, transparent 0%, rgba(15, 15, 35, 0.95) 40%)',
               borderRadius: 12,
               padding: 24,
               textAlign: 'center',

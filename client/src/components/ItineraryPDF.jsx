@@ -18,15 +18,15 @@ Font.register({
 });
 
 const colors = {
-  primary: '#7C3AED',
-  secondary: '#2563EB',
+  primary: '#ff8c33',
+  secondary: '#d94a26',
   gold: '#F59E0B',
   green: '#10B981',
-  dark: '#0F0F23',
-  darkCard: '#1A1A3E',
-  text: '#FFFFFF',
-  textSecondary: '#A0A0C0',
-  border: '#2A2A4A',
+  dark: '#fff2df',
+  darkCard: '#ffffff',
+  text: '#692300',
+  textSecondary: '#964920',
+  border: '#ecd2a8',
 };
 
 const styles = StyleSheet.create({

@@ -130,7 +130,7 @@ function ImportPage({ destination, onDone, onBack }) {
         </p>
       </div>
 
-      <div className="video-import-section" style={{ flex: 1 }}>
+      <div className="video-import-section" style={{ marginBottom: 16 }}>
         {/* Input */}
         <div className="video-input-group">
           <input
@@ -147,9 +147,13 @@ function ImportPage({ destination, onDone, onBack }) {
             onClick={handleAddVideo}
             disabled={loading}
             id="add-video-btn"
-            style={{ width: 48, height: 48, flexShrink: 0 }}
+            style={{ width: 48, height: 48, flexShrink: 0, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
-            {loading ? <div className="spinner" style={{ width: 20, height: 20, borderWidth: 2 }} /> : <Plus size={20} />}
+            {loading ? (
+              <div className="spinner" style={{ width: 20, height: 20, borderWidth: 2, borderColor: 'white', borderTopColor: 'transparent', borderRadius: '50%' }} />
+            ) : (
+              <span style={{ color: 'white', fontSize: 24, fontWeight: 'bold', lineHeight: 1 }}>+</span>
+            )}
           </button>
         </div>
 
@@ -353,7 +357,7 @@ function ImportPage({ destination, onDone, onBack }) {
         )}
       </div>
 
-      <div style={{ marginTop: 'auto', paddingTop: 16 }}>
+      <div style={{ paddingTop: 16 }}>
         <button
           className="btn btn-primary btn-full"
           onClick={() => onDone(videos)}

@@ -258,11 +258,11 @@ function FormPage({ destination, onSubmit, onBack }) {
         ))}
       </div>
 
-      <div style={{ flex: 1 }}>
+      <div style={{ marginBottom: 16 }}>
         {steps[formStep]}
       </div>
 
-      <div style={{ marginTop: 'auto', paddingTop: 16 }}>
+      <div style={{ paddingTop: 16 }}>
         {formStep < steps.length - 1 ? (
           <button
             className="btn btn-primary btn-full"

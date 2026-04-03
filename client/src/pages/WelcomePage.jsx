@@ -46,7 +46,7 @@ function WelcomePage({ onSelectDestination }) {
                 <h3>
                   {dest.emoji} {dest.name}
                 </h3>
-                <span className="country">{dest.description}</span>
+                <span className="country" style={{ color: 'white' }}>{dest.description}</span>
               </div>
             </div>
           ))}
