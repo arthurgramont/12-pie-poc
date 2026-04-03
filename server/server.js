@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
@@ -134,13 +134,15 @@ app.post('/api/video/import', async (req, res) => {
   }
 
   try {
-    const fetch = (await import('node-fetch')).default;
+    // Utilise le fetch natif de Node 18+ (utilisé par Vercel)
+    // Cela évite que le bundler de Vercel ne crash sur import('node-fetch')
+    const fetchFn = typeof fetch !== 'undefined' ? fetch : (...args) => import('node-fetch').then(m => m.default(...args));
 
     // Detect platform
     if (url.includes('tiktok.com')) {
       // TikTok oEmbed (free, no auth)
       const oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(url)}`;
-      const response = await fetch(oembedUrl);
+      const response = await fetchFn(oembedUrl);
 
       if (!response.ok) {
         return res.status(400).json({ error: 'Failed to fetch TikTok data' });
@@ -154,7 +156,7 @@ app.post('/api/video/import', async (req, res) => {
 
       // If no hashtags found in title, try scraping the page
       if (hashtags.length === 0) {
-        hashtags = await scrapeHashtagsFromPage(url, fetch);
+        hashtags = await scrapeHashtagsFromPage(url, fetchFn);
       }
 
       return res.json({
@@ -168,7 +170,7 @@ app.post('/api/video/import', async (req, res) => {
 
     } else if (url.includes('instagram.com')) {
       // Instagram: try to scrape hashtags from page
-      let hashtags = await scrapeHashtagsFromPage(url, fetch);
+      let hashtags = await scrapeHashtagsFromPage(url, fetchFn);
 
       return res.json({
         platform: 'instagram',
@@ -196,6 +198,11 @@ app.get('/api/health', (req, res) => {
 });
 
 // ---------- Start server ----------
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  });
+}
+
+// Requis par Vercel pour relier l'app Express aux fonctions Serverless
+module.exports = app;

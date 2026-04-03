@@ -18,7 +18,7 @@ function FormPage({ destination, onSubmit, onBack }) {
   const [formStep, setFormStep] = useState(0);
   const [form, setForm] = useState({
     travelers: 2,
-    ages: '',
+    ages: ['', ''],
     startDate: '',
     tripDays: 3,
     budget: 'moyen',
@@ -29,6 +29,23 @@ function FormPage({ destination, onSubmit, onBack }) {
   });
 
   const update = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
+
+  const updateTravelers = (count) => {
+    setForm((prev) => {
+      const newAges = [...prev.ages];
+      while (newAges.length < count) newAges.push('');
+      while (newAges.length > count) newAges.pop();
+      return { ...prev, travelers: count, ages: newAges };
+    });
+  };
+
+  const updateAge = (index, value) => {
+    setForm((prev) => {
+      const newAges = [...prev.ages];
+      newAges[index] = value;
+      return { ...prev, ages: newAges };
+    });
+  };
 
   const toggleInterest = (id) => {
     setForm((prev) => ({
@@ -57,14 +74,14 @@ function FormPage({ destination, onSubmit, onBack }) {
         <div className="counter-input">
           <button
             className="counter-btn"
-            onClick={() => update('travelers', Math.max(1, form.travelers - 1))}
+            onClick={() => updateTravelers(Math.max(1, form.travelers - 1))}
           >
             −
           </button>
           <span className="counter-value">{form.travelers}</span>
           <button
             className="counter-btn"
-            onClick={() => update('travelers', Math.min(20, form.travelers + 1))}
+            onClick={() => updateTravelers(Math.min(20, form.travelers + 1))}
           >
             +
           </button>
@@ -72,15 +89,27 @@ function FormPage({ destination, onSubmit, onBack }) {
       </div>
 
       <div className="form-group">
-        <label className="form-label">Âges des voyageurs</label>
-        <input
-          type="text"
-          className="form-input"
-          placeholder="Ex: 28, 30, 5"
-          value={form.ages}
-          onChange={(e) => update('ages', e.target.value)}
-          id="ages-input"
-        />
+        <label className="form-label">Âge de chaque voyageur</label>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {form.ages.map((age, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontSize: 13, color: 'var(--text-secondary)', minWidth: 90, whiteSpace: 'nowrap' }}>
+                Voyageur {i + 1}
+              </span>
+              <input
+                type="number"
+                className="form-input"
+                placeholder="Âge"
+                min="0"
+                max="120"
+                value={age}
+                onChange={(e) => updateAge(i, e.target.value)}
+                id={`age-input-${i}`}
+                style={{ flex: 1 }}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </>,
 
