@@ -248,7 +248,7 @@ function ItineraryPDF({ itinerary, destination, formData }) {
     <Document>
       {/* Cover Page */}
       <Page size="A4" style={styles.coverPage}>
-        <Text style={styles.logo}>Voyagr</Text>
+        <Text style={styles.logo}>Voyag'R</Text>
         <Text style={styles.coverTitle}>
           {stripEmoji(destination.name)}
         </Text>
@@ -272,7 +272,7 @@ function ItineraryPDF({ itinerary, destination, formData }) {
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Généré par Voyagr</Text>
+          <Text style={styles.footerText}>Généré par Voyag'R</Text>
           <Text style={styles.footerText}>
             {new Date().toLocaleDateString('fr-FR')}
           </Text>
@@ -319,7 +319,7 @@ function ItineraryPDF({ itinerary, destination, formData }) {
           ))}
 
           <View style={styles.footer}>
-            <Text style={styles.footerText}>Voyagr - {stripEmoji(destination.name)}</Text>
+            <Text style={styles.footerText}>Voyag'R - {stripEmoji(destination.name)}</Text>
             <Text style={styles.footerText}>
               Page {day.dayNumber + 1}
             </Text>
@@ -360,13 +360,13 @@ function ItineraryPDF({ itinerary, destination, formData }) {
         <View style={[styles.divider, { marginTop: 30 }]} />
 
         <Text style={{ fontSize: 10, color: colors.textSecondary, textAlign: 'center', lineHeight: 1.5 }}>
-          Ce document a été généré automatiquement par Voyagr.{'\n'}
+          Ce document a été généré automatiquement par Voyag'R.{'\n'}
           Les prix sont indicatifs et peuvent varier.{'\n'}
           Bon voyage !
         </Text>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Voyagr - Planificateur de voyage intelligent</Text>
+          <Text style={styles.footerText}>Voyag'R - Planificateur de voyage intelligent</Text>
           <Text style={styles.footerText}>{new Date().toLocaleDateString('fr-FR')}</Text>
         </View>
       </Page>

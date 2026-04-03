@@ -9,7 +9,7 @@ function WelcomePage({ onSelectDestination }) {
           <Plane size={48} strokeWidth={1.5} style={{ color: '#7C3AED' }} />
         </div>
         <h1 className="logo" style={{ fontSize: 36, marginBottom: 4 }}>
-          Voyagr
+          Voyag'R
         </h1>
         <p style={{ fontSize: 15, color: 'var(--text-muted)' }}>
           Planifiez votre voyage de rêve en swipant

@@ -66,11 +66,11 @@ function ItineraryPage({ itinerary, destination, formData, likedPlaces, onRestar
           <span className="value">{itinerary.tripDays} jours</span>
         </div>
         <div className="budget-row">
-          <span className="label">Sans Voyagr</span>
+          <span className="label">Sans Voyag'R</span>
           <span className="value" style={{ textDecoration: 'line-through', color: 'var(--text-muted)', opacity: 0.7 }}>~{budgetWithoutVoyagr}€</span>
         </div>
         <div className="budget-row total">
-          <span className="label">Avec Voyagr ✨</span>
+          <span className="label">Avec Voyag'R ✨</span>
           <span className="value" style={{ color: 'var(--accent-green)' }}>~{budgetWithVoyagr}€</span>
         </div>
         <div style={{ textAlign: 'center', marginTop: 8, fontSize: 12, color: 'var(--accent-green)', fontWeight: 600 }}>
